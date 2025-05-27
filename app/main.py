@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 from fastapi.middleware.cors import CORSMiddleware
-from app.api import auth
 from app.routes import userRouter 
 from sqlalchemy import text
 from app.routes import googleRouter
