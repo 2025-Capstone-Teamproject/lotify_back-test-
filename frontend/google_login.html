@@ -1,0 +1,46 @@
+<!-- google_login_ui.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Google Login Test</title>
+  <meta name="google-signin-client_id" content="385351075584-jq92tthnv05uk8glmgf63j1cvl807460.apps.googleusercontent.com">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    function handleCredentialResponse(response) {
+      const id_token = response.credential;
+
+      fetch("http://localhost:8000/auth/google-login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id_token })
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Full server response:", data);
+        alert("JWT: " + data.access_token);  // ← 여기서 undefined이면 콘솔 보면 해결됨
+        })
+
+      .catch(err => {
+        console.error("Login error:", err);
+      });
+    }
+
+    window.onload = function () {
+      google.accounts.id.initialize({
+        client_id: "385351075584-jq92tthnv05uk8glmgf63j1cvl807460.apps.googleusercontent.com",
+        callback: handleCredentialResponse
+      });
+      google.accounts.id.renderButton(
+        document.getElementById("google-login-button"),
+        { theme: "outline", size: "large" }
+      );
+    }
+  </script>
+</head>
+<body>
+  <h2>Google Login</h2>
+  <div id="google-login-button"></div>
+</body>
+</html>

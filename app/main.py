@@ -1,33 +1,14 @@
-# from fastapi import FastAPI
-# from routes import userRouter 
-
-# app = FastAPI()
-
-# app.include_router(userRouter.router)
-
-"""
 from fastapi import FastAPI
-from api import auth
-
-app = FastAPI(title="불법 주차 감지 시스템 API")
-
-# 라우터 등록
-app.include_router(auth.router, prefix="/auth")
-
-@app.get("/")
-async def root():
-    return {"message": "🚗 불법 주차 감지 시스템 서버 작동 중!"}
-"""
-
-from fastapi import FastAPI, Depends
-from fastapi.security import HTTPBearer
-from fastapi.openapi.models import APIKey, APIKeyIn, SecuritySchemeType
 from fastapi.openapi.utils import get_openapi
 from fastapi.middleware.cors import CORSMiddleware
 from app.api import auth
 from app.routes import userRouter 
-
-security = HTTPBearer()
+from sqlalchemy import text
+from app.routes import googleRouter
+from app.routes import naverRouter
+from app.routes import kakaoRouter
+from fastapi.staticfiles import StaticFiles
+import os
 
 app = FastAPI(
     title="불법 주차 감지 시스템 API",
@@ -40,7 +21,7 @@ def custom_openapi():
     openapi_schema = get_openapi(
         title="불법 주차 감지 시스템 API",
         version="1.0.0",
-        description="Firebase 토큰 인증 기반 API",
+        description="JWT 토큰 인증 기반 API",
         routes=app.routes,
     )
     openapi_schema["components"]["securitySchemes"] = {
@@ -59,8 +40,11 @@ def custom_openapi():
 app.openapi = custom_openapi
 
 # 라우터 등록
-# app.include_router(auth.router, prefix="/auth")
 app.include_router(userRouter.router)
+app.include_router(kakaoRouter.router)
+app.include_router(naverRouter.router)
+app.include_router(googleRouter.router)
+app.mount("/frontend", StaticFiles(directory=os.path.join(os.path.dirname(__file__), "..", "frontend")), name="frontend")
 
 @app.get("/")
 def root():

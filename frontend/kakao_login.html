@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Kakao Login</title>
+  <script>
+    function handleKakaoLogin() {
+      const clientId = "a121239edfb9d20f6cf5526d0a107cf5";
+      const redirectUri = encodeURIComponent("http://localhost:8000/auth/kakao/callback");
+      const state = "kakao_state_123";  // CSRF 방지용 난수
+
+      const loginUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`;
+      window.location.href = loginUrl;
+    }
+  </script>
+</head>
+<body>
+  <h2>카카오 로그인 테스트</h2>
+  <button onclick="handleKakaoLogin()">카카오로 로그인</button>
+</body>
+</html>

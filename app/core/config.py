@@ -8,13 +8,20 @@ class Settings:
     PROJECT_NAME: str = "Lotify"
     API_VERSION: str = "v1"
 
-    # Firebase Admin SDK JSON 파일 경로
-    FIREBASE_CREDENTIALS_PATH: str = os.getenv("FIREBASE_CREDENTIALS_PATH", "./firebase_admin_key.json")
-
-    # Database URL (예: SQLite 또는 PostgreSQL)
-    # DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./lotify.db")
+    DB_USER: str = os.getenv("USER")
+    DB_PASSWORD: str = os.getenv("PASSWD")
+    DB_HOST: str = os.getenv("HOST")
+    DB_PORT: str = os.getenv("PORT")
+    DB_NAME: str = os.getenv("DB")
+    
+    
+    SQLALCHEMY_DATABASE_URL: str = (
+        f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    )
 
     # 기타 보안 관련 설정
     SECRET_KEY: str = os.getenv("SECRET_KEY", "super-secret-key")
 
+    GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID")
+    
 settings = Settings()
