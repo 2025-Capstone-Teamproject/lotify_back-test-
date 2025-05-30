@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta            # 시간 계산을 위한 기본 라이브러리
 from jose import JWTError, jwt                      # JWT 인코딩/디코딩 및 예외 처리용
 from app.core.config import settings                # .env 설정 불러오기 위한 모듈
-from fastapi import HTTPException, status, Depends
+from fastapi import HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer
 
 # 보안 키: JWT 서명을 위한 비밀 키 (.env에서 불러옴)

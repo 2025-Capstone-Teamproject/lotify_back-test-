@@ -2,7 +2,7 @@ from typing import Optional
 from pydantic import BaseModel
 from fastapi import Header
 
-# request
+# ====== Request Message =======
 class UserRegister(BaseModel):
     user_id: str
     user_pw: str
@@ -14,10 +14,18 @@ class UserLogin(BaseModel):
     user_id: str
     user_pw: str
 
-# firebase 로그인
-# class SocialUserLogin(BaseModel):
-#     Authorization: str
+class AdminRequestUser(BaseModel):
+    # user_id: str
+    justification: str
+    region: str
 
+# ====== Response Message =======
+
+class MessageResponse(BaseModel):
+    message: str
+
+    class Config:
+        orm_mode = True
 class RegisterResponse(BaseModel):
     message: str
 
@@ -29,5 +37,4 @@ class LoginResponse(BaseModel):
     access_token: Optional[str] = None
 
     class Config:
-        from_attributes = True
-      
+        from_attributes = True 

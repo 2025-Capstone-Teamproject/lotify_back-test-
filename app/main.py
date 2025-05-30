@@ -1,13 +1,17 @@
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
-from fastapi.middleware.cors import CORSMiddleware
-from app.routes import userRouter 
+from app.routes import userRouter, reportRouter
 from sqlalchemy import text
 from app.routes import googleRouter
 from app.routes import naverRouter
 from app.routes import kakaoRouter
 from fastapi.staticfiles import StaticFiles
 import os
+from fastapi.security import HTTPBearer
+
+
+
+security = HTTPBearer()
 
 app = FastAPI(
     title="불법 주차 감지 시스템 API",
@@ -44,6 +48,8 @@ app.include_router(kakaoRouter.router)
 app.include_router(naverRouter.router)
 app.include_router(googleRouter.router)
 app.mount("/frontend", StaticFiles(directory=os.path.join(os.path.dirname(__file__), "..", "frontend")), name="frontend")
+app.include_router(reportRouter.router)
+
 
 @app.get("/")
 def root():
