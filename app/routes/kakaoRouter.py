@@ -44,17 +44,19 @@ def kakao_callback(request: Request, db: Session = Depends(get_db)):
     profile_data = profile_res.json()
 
     kakao_account = profile_data.get("kakao_account", {})
-    email = kakao_account.get("email")
-    name = kakao_account.get("profile", {}).get("nickname", "")
+    nickname = kakao_account.get("profile", {}).get("nickname", "")
 
-    if not email:
-        raise HTTPException(status_code=400, detail="Email is required")
+    if not nickname:
+        raise HTTPException(status_code=400, detail="Nickname is required")
+
+    # 이메일 없는 경우 → 임의 생성
+    email = kakao_account.get("email") or f"{nickname}@kakao.user"
 
     # 3. 회원가입 or 로그인
     user = user_service.get_or_create_social_user(
         db=db,
         email=email,
-        name=name
+        name=nickname
     )
 
     jwt_token = create_access_token({"user_id": user.user_id})
