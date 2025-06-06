@@ -3,7 +3,6 @@ from pydantic import BaseModel
 import requests
 
 router = APIRouter(
-    prefix="/detect",
     tags=["AI 탐지"]
 )
 
@@ -11,12 +10,12 @@ router = APIRouter(
 class ImageBase64Request(BaseModel):
     image_base64: str
 
-@router.post("/integrated")
+@router.post("/detect-file")
 async def detect_violation_by_file(file: UploadFile = File(...)):
     """AI 서버로 이미지 파일 업로드하여 불법주차 탐지"""
     try:
         files = {'file': (file.filename, await file.read(), file.content_type)}
-        response = requests.post("http://localhost:8001/detect/integrated", files=files)
+        response = requests.post("http://localhost:8001/detect-file", files=files)
 
         if response.status_code == 200:
             return response.json()
@@ -26,11 +25,11 @@ async def detect_violation_by_file(file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/base64")
+@router.post("/detect")
 async def detect_violation_by_base64(request: ImageBase64Request):
     """AI 서버로 base64 이미지 전송하여 불법주차 탐지"""
     try:
-        response = requests.post("http://localhost:8001/detect/base64", json=request.dict())
+        response = requests.post("http://localhost:8001/detect", json=request.dict())
 
         if response.status_code == 200:
             return response.json()
