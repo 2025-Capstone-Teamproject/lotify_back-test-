@@ -36,6 +36,9 @@ def create_disabled_request(db: Session, request: schema.DisabledRequest,
 requested_by: str = None) -> models.Disabled_Request:
     # requested_by가 제공되지 않은 경우, vehicle의 registered_by 사용
     if not requested_by:
+        vehicle = db.query(models.Vehicle).filter(models.Vehicle.vehicle_num == request.vehicle_num).first()
+    if not vehicle:
+        raise HTTPException(status_code=404, detail="차량 정보를 찾을 수 없습니다.")
         requested_by = vehicle.registered_by
     
     # 이미 동일한 vehicle_num과 requested_by로 요청이 존재하는지 확인
@@ -79,7 +82,7 @@ def approve_request(db: Session, vehicle_num: str, requested_by: str, admin_id: 
     if vehicle:
         vehicle.is_disabled = True
         vehicle.approved_by = admin_id
-        vehicle.approved_at = datetime.utcnow() + datetime.timedelta(hours=9)
+        vehicle.approved_at = datetime.utcnow()+timedelta(hours=9)
 
     db.commit()
     return request
