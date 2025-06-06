@@ -1,5 +1,5 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, String, Integer, Double, LargeBinary, DateTime, ForeignKey, Boolean
+from sqlalchemy import Column, String, Integer, Double, LargeBinary, DateTime, ForeignKey, Boolean, Text
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from app.core.database import engine

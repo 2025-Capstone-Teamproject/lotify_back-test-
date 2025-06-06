@@ -1,9 +1,12 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from app.models import models, schema
+from app import models, schema
+from app.models.models import Board
+from app.schema import boardSchema
+
 
 # 게시글 작성
-def write_post(db: Session, post_data: schema.writePost, writer: str):
+def write_post(db: Session, post_data: boardSchema.writePost, writer: str):
     new_post = models.Board(
         writer=writer,
         title=post_data.title,
@@ -16,7 +19,7 @@ def write_post(db: Session, post_data: schema.writePost, writer: str):
 
 # 게시글 전체 조회
 def get_all_posts(db: Session):
-    return db.query(models.Board).order_by(models.Board.created_at.desc()).all()
+    return db.query(Board).order_by(Board.created_at.desc()).all()
 
 # 게시글 단일 조회
 def get_post_by_id(db: Session, post_id: int):

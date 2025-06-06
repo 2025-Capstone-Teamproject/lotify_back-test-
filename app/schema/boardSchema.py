@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 #게시글 작성
 class writePost(BaseModel):
