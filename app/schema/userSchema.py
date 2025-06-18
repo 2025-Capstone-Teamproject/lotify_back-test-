@@ -35,6 +35,7 @@ class RegisterResponse(BaseModel):
 class LoginResponse(BaseModel):
     message: str
     access_token: Optional[str] = None
+    role: int # 1
 
     class Config:
         from_attributes = True 

@@ -27,12 +27,13 @@ class UserPresenter:
         
         # 토큰 생성
         access_token = create_access_token({"user_id": login_result.user_id})
+        user_role = getattr(login_result, "role", None) # 2
         
-        
-        # 결과 값
+        # 결과 값 
         return userSchema.LoginResponse(
             message="로그인에 성공하였습니다.",
-            access_token=access_token
+            access_token=access_token,
+            role=user_role # 3
         )
 
     def admin_request_user(self, db: Session, user_data: userSchema.AdminRequestUser) -> userSchema.MessageResponse:
